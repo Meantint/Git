@@ -38,10 +38,10 @@ Git 사용 전에 사용자 정보를 입력해줘야한다. Git은 버전을 �
 
 ```git
 # user.name 뒤에 이름을 넣는다.
-git config --global user.name "my name"
+git config --global user.name "user_name"
 
 # user.email 뒤에 이메일을 넣는다.
-git config --global user.email "my@email"
+git config --global user.email "user_email"
 ```
 
 위 명령어의 `--global` 옵션은 현재 컴퓨터의 모든 저장소에서 같은 사용자 정보를 사용하도록 설정해주는 명령어이다.
