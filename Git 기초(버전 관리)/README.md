@@ -49,6 +49,7 @@ Git의 구조는 다음 3개로 구성되어 있다.
 
 ```bash
 git status
+
 # status message
 On branch master
 No commits yet
@@ -64,9 +65,8 @@ nothing to commit (create/copy files and use "git add" to track)
 이번에는 폴더에 임의의 파일을 만들고 저장한 후 `git status`를 입력해보자.
 
 ```bash
-touch test.txt  # Create test.txt file
-
 git status
+
 # status message
 On branch master
 
@@ -89,8 +89,11 @@ Untracked files:
 
 ```bash
 git add test.txt # Staging test.txt
+```
 
+```bash
 git status
+
 # status message
 On branch master
 
@@ -111,6 +114,7 @@ Changes to be committed:
 
 ```bash
 git commit -m "Create test.txt"
+
 # commit message
 [master (root-commit) fe2dc0f] Create test.txt
  1 file changed, 0 insertions(+), 0 deletions(-)
@@ -118,8 +122,8 @@ git commit -m "Create test.txt"
 ```
 
 ```bash
-# 현재 상태를 보기 위한 git status
 git status
+
 # status message
 On branch master
 nothing to commit, working tree clean # 버전으로 만들 파일 X, 작업 트리도 수정사항 없다.
@@ -131,6 +135,7 @@ nothing to commit, working tree clean # 버전으로 만들 파일 X, 작업 트
 
 ```bash
 git log
+
 # log message
 commit fe2dc0fe0d1a3ee6805b86b42f58f169b0a7fea6 (HEAD -> master)
 Author: meantint <mistinca@naver.com>
@@ -147,6 +152,7 @@ Date:   Sat Oct 9 01:32:00 2021 +0900
 
 ```bash
 git status
+
 # status message
 On branch master
 Changes not staged for commit:
@@ -175,6 +181,7 @@ bye
 
 ```bash
 git diff
+
 # diff message
 diff --git a/test.txt b/test.txt
 index 45b983b..57060ad 100644
@@ -197,6 +204,7 @@ index 45b983b..57060ad 100644
 
 ```bash
 git status
+
 # status message
 On branch master
 Changes not staged for commit:
@@ -215,6 +223,7 @@ Untracked files:
 git add test.txt test1.txt # Staging test.txt, test1.txt
 
 git status
+
 # status message
 On branch master
 Changes to be committed:
@@ -227,8 +236,11 @@ Changes to be committed:
 
 ```bash
 git commit -m "new version" # commit
+```
 
+```bash
 git log --stat
+
 # log message
 commit b0816847d7ce71680037d79beb40b38d6500fa1a (HEAD -> master)
 Author: meantint <mistinca@naver.com>
@@ -285,36 +297,128 @@ Date:   Sat Oct 9 13:49:01 2021 +0900
 
 커밋 취소, 스테이징 한 파일 내리기 등의 작업 되돌리기를 해보자.
 
-### 작업 트리에서 수정한 파일 되돌리기(git checkout)
+### 작업 트리에서 수정한 파일 되돌리기(git restore)
 
-`test1.txt` 파일을 변경해보자.
+`test.txt` 파일을 변경해보자.
 
 ```bash
-# test1.txt 기존 파일
+# test.txt 기존 파일
 Hello World!
 ```
 
 ```bash
-# test1.txt 변경 파일
+# test.txt 변경 파일
 Hello World!
 
-git checkout test
+git restore test
 ```
 
 변경된 부분이 있기 때문에 `git status`로 상태를 보면 아래와 같다.
 
 ```bash
 git status
+
 #status message
 On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
-        modified:   test1.txt
+        modified:   test.txt
 ```
 
 ```bash
-git checkout -- test1.txt
+git restore test.txt
 ```
 
-`git checkout -- [file_name]`은 작업트리에 있는 `[file_name]`의 변경 사항을 취소시켜준다.
+`git restore`는 작업트리에 있는 변경 사항을 취소(복구)시켜준다. 다시 한 번 상태를 확인해보자.
+
+```bash
+git status
+
+# status message
+On branch master
+nothing to commit, working tree clean
+```
+
+작업 파일의 수정사항이 사라진 것을 확인할 수 있다.
+
+### 스테이징 되돌리기(git restore --staged)
+
+`git restore`은 작업 트리 수정 파일을 되돌려주지만 `git restore --staged`은 스테이징을 취소 해주는 명령어이다.
+
+현재 상태는 다음과 같다.
+
+```bash
+git status
+
+# status message
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   test.txt
+```
+
+명령어를 통해 스테이징된 파일을 취소해보자.
+
+```bash
+git restore --staged test.txt
+```
+
+다시 상태를 확인하면 다음과 같다.
+
+```bash
+git status
+
+# status message
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   test.txt
+```
+
+다시 작업 트리에서의 수정 상태로 파일이 변경되어 있는 것을 볼 수 있다.
+
+### 최신 커밋 되돌리기(git reset HEAD^)
+
+파일을 스테이징하고 커밋까지 했을 때, 가장 마지막 커밋을 취소하는 명령어를 알아보자.
+
+현재 상태는 다음과 같다.
+
+```bash
+# --stat : commit과 관련된 파일들도 추가해서 보여준다.
+# --oneline : 한 줄에 각 커밋을 보여준다.
+git log --stat --oneline
+
+# log message
+0edc4d2 (HEAD -> master) Test (git reset HEAD^)
+ test.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ff7164a Fix test.txt content
+ test.txt | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+```
+
+가장 최신 버전의 커밋 메시지 `git reset HEAD^ TEST`를 볼 수 있고 이전의 커밋 메시지가 `Fix test.txt content`인 것을 알 수 있다.
+
+최신 커밋인 `Test (git reset HEAD^)`를 지워보자.
+
+```bash
+git reset HEAD^
+```
+
+최신 커밋이 제거되었는지 확인해보자.
+
+```bash
+git log --stat --oneline
+
+# log message
+ff7164a (HEAD -> master) Fix test.txt content
+ test.txt | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+a2dcf49 Delete test1.txt
+ test1.txt | 3 ---
+ 1 file changed, 3 deletions(-)
+```
+
+최신 커밋이 2번째 최신 커밋이었던 `Fix test.txt content`로 바뀐 것을 알 수 있고 이를 통해 기존의 최신 커밋이 제거되었음을 알 수 있다.
