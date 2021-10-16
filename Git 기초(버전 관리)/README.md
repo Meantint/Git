@@ -430,3 +430,51 @@ a2dcf49 Delete test1.txt
 ```
 
 최신 커밋이 2번째 최신 커밋이었던 `Fix test.txt content`로 바뀐 것을 알 수 있고 이를 통해 기존의 최신 커밋이 제거되었음을 알 수 있다.
+
+### 특정 커밋으로 되돌아가기(git reset --hard)
+
+바로 이전 버전이 아니라, 특정한 버전으로 돌아가야 할 상황이 생길 수도 있다.
+
+우선 현재 상태를 보자.
+
+```bash
+git log --oneline
+```
+
+```bash
+# log message
+3e47afb (HEAD -> master) Reset 5
+d6a616a Reset 4
+9bffe82 Reset 3
+87e5901 Reset 2
+ebbfebe Reset 1
+```
+
+5개의 버전이 있는 것을 알 수 있다. 여기서 `Reset 2` 버전으로 돌아가보자.
+
+`git reset --hard` 뒤의 해시는 본인 실습해서 나온 해시를 써야한다.
+
+```bash
+git reset --hard 87e5901
+```
+
+정상적으로 실행되었다면 다음과 같은 메시지가 생성된다.
+
+```bash
+# log message
+HEAD is now at 87e5901 Reset 2
+```
+
+다시 한 번 `git log --oneline`을 입력해보자.
+
+```bash
+git log --oneline
+```
+
+```bash
+# log message
+87e5901 (HEAD -> master) Reset 2
+ebbfebe Reset 1
+```
+
+이전에 보였던 버전인 `Reset 5`, `Reset 4`, `Reset 3`이 사라진 것을 볼 수 있다. 이렇게 `git reset --hard` 명령어는 특정 커밋으로 이동하면서까지의 커밋들을 모두 **삭제**하는 명령어이다. 다시 되돌릴 수 없으니 사용할 때 유의하자.
