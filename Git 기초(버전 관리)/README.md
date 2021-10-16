@@ -257,6 +257,14 @@ Date:   Sat Oct 9 13:49:01 2021 +0900
 
 ## 상태 정리
 
+<p align="center">
+   <img width="720" src="https://user-images.githubusercontent.com/50372451/137583707-cee69a58-3b33-457a-a257-9f5354750612.png">
+</p>
+
+<p align="center">
+   Git 상태 이미지
+</p>
+
 - `untracked` : 처음 생성한 파일이 가지는 상태
 
 - `unmodified` : 기존에 있던 파일, 수정할 것이 없는 상태
