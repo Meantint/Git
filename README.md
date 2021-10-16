@@ -45,3 +45,9 @@ git config --global user.email "user_email"
 ```
 
 위 명령어의 `--global` 옵션은 현재 컴퓨터의 모든 저장소에서 같은 사용자 정보를 사용하도록 설정해주는 명령어이다.
+
+## 참고
+
+- [지옥에서 온 문서 관리자 깃&깃허브 입문](https://opentutorials.org/course/2708)
+
+- [https://git-scm.com/book/ko/v2](https://git-scm.com/book/ko/v2)
