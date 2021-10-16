@@ -1,4 +1,4 @@
-# Git 기초(버전 관리)
+# Version Control
 
 ## Git 초기화
 
@@ -478,3 +478,64 @@ ebbfebe Reset 1
 ```
 
 이전에 보였던 버전인 `Reset 5`, `Reset 4`, `Reset 3`이 사라진 것을 볼 수 있다. 이렇게 `git reset --hard` 명령어는 특정 커밋으로 이동하면서까지의 커밋들을 모두 **삭제**하는 명령어이다. 다시 되돌릴 수 없으니 사용할 때 유의하자.
+
+### 특정 커밋으로 되돌리기(git revert)
+
+그렇다면 커밋을 삭제하지 않고 특정 커밋으로 돌아가는 방법이 있을까? 있기 때문에 물어봤다.
+
+이전에 사용했던 `reset_hard.txt` 파일에 커밋을 다시 3개 더 만들어서 `git log --oneline` 명령어를 해보자.
+
+```bash
+git log --oneline
+```
+
+```bash
+# log message
+703bf43 (HEAD -> master) Reset 5
+992590b Reset 4
+84ec13a Reset 3
+87e5901 Reset 2
+ebbfebe Reset 1
+```
+
+이제 직전 커밋인 `Reset 4`로 넘어가려고 한다. 주의할 점은 `git reset --hard` 명령어의 경우 뒤에 입력한 커밋 해시로 이동을 한 것이지만 `git revert` 명령어는 뒤에 입력하는 커밋 해시를 취소하기 때문에 약간의 차이가 있다.
+
+```bash
+git revert 703bf43
+```
+
+위의 명령어를 입력하면 기본 에디터가 자동으로 켜지면서 아래와 같은 메시지가 뜬다.
+
+```bash
+Revert "Reset 5"
+
+This reverts commit 703bf4389502e6e2ba48514acec8200148ba759c.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+# Changes to be committed:
+#       modified:   reset_hard.txt
+#
+```
+
+문서 맨 위의 메시지는 되돌리면서 만들어질 버전에 대한 커밋 메시지이다. 수정해서 커밋 메시지를 변경할 수 있다. 변경하지 않으면 위의 메시지가 커밋 메시지가 된다. 에디터를 종료하고 `git log --oneline`을 입력해보자.
+
+```bash
+git log --oneline
+```
+
+```bash
+# log message
+33f4761 (HEAD -> master) Revert "Reset 5"
+703bf43 Reset 5
+992590b Reset 4
+84ec13a Reset 3
+87e5901 Reset 2
+ebbfebe Reset 1
+```
+
+`Revert "Reset 5"`라는 커밋 메시지를 가진 새로운 커밋이 생겼다. 그리고 되돌렸던 버전인 `Reset 5`의 커밋이 그대로 남아있는데 이것은 `Reset 4`에서 `Reset 5`로 넘어가면서 생긴 변경점들을 취소하고 새 커밋을 만든 것이기 때문에 이전에 변경했던 이력인 `Reset 5` 커밋은 제거되지 않고 그대로 보존되어 있다.
+
+`Revert "Reset 5"` 커밋은 `Reset 4`의 상태다.
